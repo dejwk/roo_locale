@@ -1,0 +1,32 @@
+{
+    "name": "roo_locale",
+    "description": "Multi-language support for roo libraries on microcontrollers.",
+    "keywords": [
+        "language",
+        "locale"
+    ],
+    "authors": [
+        {
+            "name": "Dawid Kurzyniec",
+            "email": "dawid.kurzyniec@gmail.com",
+            "maintainer": true
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dejwk/roo_locale"
+    },
+    "version": "1.0.0",
+    "homepage": "https://github.com/dejwk/roo_locale",
+    "frameworks": [
+        "Arduino"
+    ],
+    "build": {
+        "srcDir": "src",
+        "srcFilter": "+<*> -<examples> -<benchmarks> -<doc> -<test>"
+    },
+    "examples": [
+        "examples/**/*.ino"
+    ],
+    "dependencies": {}
+}
