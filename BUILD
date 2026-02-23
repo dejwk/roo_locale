@@ -1,15 +1,17 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
 cc_library(
     name = "roo_locale",
-    visibility = ["//visibility:public"],
     srcs = glob(
         [
             "src/**/*.h",
         ],
         exclude = ["test/**"],
     ),
+    defines = [],
     includes = [
         "src",
     ],
-    defines = [],
+    visibility = ["//visibility:public"],
     deps = [],
 )
