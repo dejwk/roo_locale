@@ -1,5 +1,9 @@
 #pragma once
 
+/// Language identifier constants used by roo locale APIs.
+///
+/// The values are stable numeric IDs that map to BCP-47-like language tags,
+/// represented as macro names such as `ROO_LANG_en`.
 #define ROO_LANG_ab 10001
 #define ROO_LANG_ace 10002
 #define ROO_LANG_ach 10003
