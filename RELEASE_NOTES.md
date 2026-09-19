@@ -1,3 +1,10 @@
+# roo_locale 1.1.4
+
+- Updated the Bazel `rules_cc` dependency from 0.2.17 to 0.2.25.
+- Added consolidated release notes for previous releases.
+
+---
+
 # [roo_locale 1.1.3](https://github.com/dejwk/roo_locale/releases/tag/1.1.3)
 
 Published 2026-08-30.
