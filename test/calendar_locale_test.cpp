@@ -312,5 +312,146 @@ TEST(CalendarLocaleTest, EnglishSharedNames) {
   EXPECT_EQ(us.digits, gb.digits);
 }
 
+// Verifies fr-FR native names, Sunday-first indexing, and regional conventions.
+TEST(CalendarLocaleTest, FrenchFrance) {
+  const CalendarLocale& locale = FrenchFrance();
+  ValidateLocale(locale);
+  EXPECT_STREQ(locale.tag, "fr-FR");
+  EXPECT_STREQ(locale.month_standalone_wide[0], "janvier");
+  EXPECT_STREQ(locale.month_standalone_wide[10], "novembre");
+  EXPECT_STREQ(locale.month_date_wide[10], "novembre");
+  EXPECT_STREQ(locale.month_date_abbreviated[1], "févr.");
+  EXPECT_STREQ(locale.weekday_abbreviated[0], "dim.");
+  EXPECT_STREQ(locale.weekday_abbreviated[6], "sam.");
+  EXPECT_STREQ(locale.weekday_narrow[2], "M");
+  EXPECT_EQ(locale.first_weekday, Weekday::kMonday);
+  EXPECT_EQ(locale.hour_cycle, HourCycle::kH23);
+  EXPECT_EQ(locale.script, Script::kLatin);
+  EXPECT_EQ(locale.direction, TextDirection::kLtr);
+  EXPECT_STREQ(locale.am, "AM");
+  EXPECT_STREQ(locale.pm, "PM");
+  EXPECT_STREQ(locale.fraction_separator, ",");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDate),
+               "{dd}/{MM}/{yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDayMonth),
+               "{dd}/{MM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kDayMonthWide), "{d} {MMMM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kMonthYearWide),
+               "{LLLL} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kFullDate),
+               "{d} {MMMM} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH23Minutes), "{HH}:{mm}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Minutes),
+               "{h}:{mm}\u202f{a}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Millis),
+               "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
+}
+
+// Verifies es-ES native names, Sunday-first indexing, and regional conventions.
+TEST(CalendarLocaleTest, SpanishSpain) {
+  const CalendarLocale& locale = SpanishSpain();
+  ValidateLocale(locale);
+  EXPECT_STREQ(locale.tag, "es-ES");
+  EXPECT_STREQ(locale.month_standalone_wide[0], "enero");
+  EXPECT_STREQ(locale.month_standalone_wide[10], "noviembre");
+  EXPECT_STREQ(locale.month_date_wide[10], "noviembre");
+  EXPECT_STREQ(locale.month_date_abbreviated[1], "feb");
+  EXPECT_STREQ(locale.weekday_abbreviated[0], "dom");
+  EXPECT_STREQ(locale.weekday_abbreviated[6], "sáb");
+  EXPECT_STREQ(locale.weekday_narrow[2], "M");
+  EXPECT_EQ(locale.first_weekday, Weekday::kMonday);
+  EXPECT_EQ(locale.hour_cycle, HourCycle::kH23);
+  EXPECT_EQ(locale.script, Script::kLatin);
+  EXPECT_EQ(locale.direction, TextDirection::kLtr);
+  EXPECT_STREQ(locale.am, "a.\u202fm.");
+  EXPECT_STREQ(locale.pm, "p.\u202fm.");
+  EXPECT_STREQ(locale.fraction_separator, ",");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDate),
+               "{d}/{M}/{yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDayMonth), "{d}/{M}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kDayMonthWide),
+               "{d} de {MMMM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kMonthYearWide),
+               "{LLLL} de {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kFullDate),
+               "{d} de {MMMM} de {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH23Minutes), "{H}:{mm}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Minutes),
+               "{h}:{mm}\u202f{a}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Millis),
+               "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
+}
+
+// Verifies it-IT native names, Sunday-first indexing, and regional conventions.
+TEST(CalendarLocaleTest, ItalianItaly) {
+  const CalendarLocale& locale = ItalianItaly();
+  ValidateLocale(locale);
+  EXPECT_STREQ(locale.tag, "it-IT");
+  EXPECT_STREQ(locale.month_standalone_wide[0], "gennaio");
+  EXPECT_STREQ(locale.month_standalone_wide[10], "novembre");
+  EXPECT_STREQ(locale.month_date_wide[10], "novembre");
+  EXPECT_STREQ(locale.month_date_abbreviated[1], "feb");
+  EXPECT_STREQ(locale.weekday_abbreviated[0], "dom");
+  EXPECT_STREQ(locale.weekday_abbreviated[6], "sab");
+  EXPECT_STREQ(locale.weekday_narrow[2], "M");
+  EXPECT_EQ(locale.first_weekday, Weekday::kMonday);
+  EXPECT_EQ(locale.hour_cycle, HourCycle::kH23);
+  EXPECT_EQ(locale.script, Script::kLatin);
+  EXPECT_EQ(locale.direction, TextDirection::kLtr);
+  EXPECT_STREQ(locale.am, "AM");
+  EXPECT_STREQ(locale.pm, "PM");
+  EXPECT_STREQ(locale.fraction_separator, ",");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDate),
+               "{dd}/{MM}/{yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDayMonth),
+               "{dd}/{MM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kDayMonthWide), "{d} {MMMM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kMonthYearWide),
+               "{LLLL} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kFullDate),
+               "{d} {MMMM} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH23Minutes), "{HH}:{mm}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Minutes),
+               "{h}:{mm}\u202f{a}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Millis),
+               "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
+}
+
+// Verifies de-DE native names, Sunday-first indexing, and regional conventions.
+TEST(CalendarLocaleTest, GermanGermany) {
+  const CalendarLocale& locale = GermanGermany();
+  ValidateLocale(locale);
+  EXPECT_STREQ(locale.tag, "de-DE");
+  EXPECT_STREQ(locale.month_standalone_wide[0], "Januar");
+  EXPECT_STREQ(locale.month_standalone_wide[10], "November");
+  EXPECT_STREQ(locale.month_date_wide[10], "November");
+  EXPECT_STREQ(locale.month_date_abbreviated[1], "Feb.");
+  EXPECT_STREQ(locale.weekday_abbreviated[0], "So.");
+  EXPECT_STREQ(locale.weekday_abbreviated[6], "Sa.");
+  EXPECT_STREQ(locale.weekday_narrow[2], "D");
+  EXPECT_EQ(locale.first_weekday, Weekday::kMonday);
+  EXPECT_EQ(locale.hour_cycle, HourCycle::kH23);
+  EXPECT_EQ(locale.script, Script::kLatin);
+  EXPECT_EQ(locale.direction, TextDirection::kLtr);
+  EXPECT_STREQ(locale.am, "AM");
+  EXPECT_STREQ(locale.pm, "PM");
+  EXPECT_STREQ(locale.fraction_separator, ",");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDate),
+               "{dd}.{MM}.{yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDayMonth),
+               "{d}.{M}.");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kDayMonthWide),
+               "{d}. {MMMM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kMonthYearWide),
+               "{LLLL} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kFullDate),
+               "{d}. {MMMM} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH23Minutes), "{HH}:{mm}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Minutes),
+               "{h}:{mm}\u202f{a}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Millis),
+               "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
+}
+
 }  // namespace
 }  // namespace roo_locale

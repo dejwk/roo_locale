@@ -106,4 +106,16 @@ const CalendarLocale& EnglishUnitedStates();
 /// Returns the program-lifetime Gregorian locale for en-GB.
 const CalendarLocale& EnglishUnitedKingdom();
 
+/// Returns the program-lifetime Gregorian locale for fr-FR.
+const CalendarLocale& FrenchFrance();
+
+/// Returns the program-lifetime Gregorian locale for es-ES.
+const CalendarLocale& SpanishSpain();
+
+/// Returns the program-lifetime Gregorian locale for it-IT.
+const CalendarLocale& ItalianItaly();
+
+/// Returns the program-lifetime Gregorian locale for de-DE.
+const CalendarLocale& GermanGermany();
+
 }  // namespace roo_locale

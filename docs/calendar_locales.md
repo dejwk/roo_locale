@@ -40,6 +40,10 @@ The consumer implements pattern evaluation, bounds checking, and shaping.
 | pl-PL | 10 listopada 2026 | 10.11.2026 | Monday | H23 |
 | en-US | November 10, 2026 | 11/10/2026 | Sunday | H12 |
 | en-GB | 10 November 2026 | 10/11/2026 | Monday | H23 |
+| fr-FR | 10 novembre 2026 | 10/11/2026 | Monday | H23 |
+| es-ES | 10 de noviembre de 2026 | 10/11/2026 | Monday | H23 |
+| it-IT | 10 novembre 2026 | 10/11/2026 | Monday | H23 |
+| de-DE | 10. November 2026 | 10.11.2026 | Monday | H23 |
 
 ## Source and attribution
 
@@ -48,7 +52,7 @@ Data is a reviewed static subset of Unicode CLDR **48**, tag `release-48`, commi
 The data is covered by the [Unicode License V3](../LICENSE-UNICODE), separately
 from this library's MIT code license. Copyright © 2004–2025 Unicode, Inc.
 
-Source files under that commit: `common/main/{root,pl,en_US,en_001,en_GB}.xml`,
+Source files under that commit: `common/main/{root,pl,en,en_US,en_001,en_GB,fr,es,it,de}.xml`,
 `common/supplemental/{supplementalData,numberingSystems}.xml`.
 Gregorian calendar aliases and inheritance markers are resolved into complete
 tables; no source inheritance markers are retained. Week starts and preferred
