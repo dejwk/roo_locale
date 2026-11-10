@@ -118,4 +118,7 @@ const CalendarLocale& ItalianItaly();
 /// Returns the program-lifetime Gregorian locale for de-DE.
 const CalendarLocale& GermanGermany();
 
+/// Returns the program-lifetime Gregorian locale for ru-RU.
+const CalendarLocale& RussianRussia();
+
 }  // namespace roo_locale

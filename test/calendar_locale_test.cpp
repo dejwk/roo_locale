@@ -453,5 +453,46 @@ TEST(CalendarLocaleTest, GermanGermany) {
                "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
 }
 
+// Verifies ru-RU native names, Sunday-first indexing, and regional conventions.
+TEST(CalendarLocaleTest, RussianRussia) {
+  const CalendarLocale& locale = RussianRussia();
+  for (size_t month = 0; month < 12; ++month) {
+    EXPECT_STRNE(locale.month_standalone_wide[month],
+                 locale.month_date_wide[month]);
+  }
+  EXPECT_STREQ(locale.month_standalone_abbreviated[2], "март");
+  EXPECT_STREQ(locale.month_date_abbreviated[2], "мар.");
+  ValidateLocale(locale);
+  EXPECT_STREQ(locale.tag, "ru-RU");
+  EXPECT_STREQ(locale.month_standalone_wide[0], "январь");
+  EXPECT_STREQ(locale.month_standalone_wide[10], "ноябрь");
+  EXPECT_STREQ(locale.month_date_wide[10], "ноября");
+  EXPECT_STREQ(locale.month_date_abbreviated[1], "февр.");
+  EXPECT_STREQ(locale.weekday_abbreviated[0], "вс");
+  EXPECT_STREQ(locale.weekday_abbreviated[6], "сб");
+  EXPECT_STREQ(locale.weekday_narrow[2], "В");
+  EXPECT_EQ(locale.first_weekday, Weekday::kMonday);
+  EXPECT_EQ(locale.hour_cycle, HourCycle::kH23);
+  EXPECT_EQ(locale.script, Script::kCyrillic);
+  EXPECT_EQ(locale.direction, TextDirection::kLtr);
+  EXPECT_STREQ(locale.am, "AM");
+  EXPECT_STREQ(locale.pm, "PM");
+  EXPECT_STREQ(locale.fraction_separator, ",");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDate),
+               "{dd}.{MM}.{yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDayMonth),
+               "{dd}.{MM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kDayMonthWide), "{d} {MMMM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kMonthYearWide),
+               "{LLLL} {yyyy}\u202fг.");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kFullDate),
+               "{d} {MMMM} {yyyy}\u202fг.");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH23Minutes), "{HH}:{mm}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Minutes),
+               "{h}:{mm}\u202f{a}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Millis),
+               "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
+}
+
 }  // namespace
 }  // namespace roo_locale
