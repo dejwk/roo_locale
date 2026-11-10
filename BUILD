@@ -1,3 +1,4 @@
+load(":test/calendar_selection_tests.bzl", "calendar_selection_tests")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
 
@@ -25,6 +26,7 @@ cc_test(
     size = "small",
     srcs = ["test/calendar_locale_test.cpp"],
     linkstatic = True,
+    data = [":invalid_calendar_override"],
     deps = [":calendar_locale", "@googletest//:gtest_main"],
 )
 
@@ -34,3 +36,5 @@ cc_test(
     srcs = ["test/language_only.cpp"],
     deps = [":roo_locale"],
 )
+
+calendar_selection_tests()

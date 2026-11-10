@@ -92,3 +92,43 @@ and Arabic contextual shaping and bidi layout. Consumers measure and paint the
 same shaped runs, isolate ASCII offsets as LTR runs, and choose an explicit
 ASCII numeric LTR fallback when native rendering is unavailable. Native-script
 rendering and fallback acceptance belong to consumer tests, not this data library.
+
+## Build defaults and explicit selection
+
+`DefaultCalendarLocale()` is an inline build selection helper. Define
+`ROO_CALENDAR_LOCALE` as one of `pl_PL`, `en_US`, `en_GB`, `fr_FR`, `es_ES`,
+`it_IT`, `de_DE`, `ru_RU`, `zh_Hans_CN`, `hi_IN`, `ar_EG`. Unsupported explicit
+identifiers fail compilation. Keep build macros consistent across translation
+units. The override wins over `ROO_LANG`; a locale never selects a timezone.
+
+Without an override, exact language IDs map as follows:
+
+| ROO_LANG suffix | Default |
+| --- | --- |
+| pl | pl-PL |
+| en, en_US | en-US |
+| en_GB | en-GB |
+| fr | fr-FR |
+| es, es_ES | es-ES |
+| it | it-IT |
+| de | de-DE |
+| ru | ru-RU |
+| zh, zh_Hans | zh-Hans-CN |
+| hi | hi-IN |
+| ar | ar-EG |
+| All other IDs | en-US |
+
+Unlisted regions/scripts such as `en_AU` and `zh_Hant` use the compatibility
+fallback; select a supported regional override or a custom locale explicitly.
+Per-consumer references take precedence over these build defaults:
+
+```cpp
+const roo_locale::CalendarLocale& polish = roo_locale::PolishPoland();
+const roo_locale::CalendarLocale& british = roo_locale::EnglishUnitedKingdom();
+// Pass either reference to each consumer; both coexist without global state.
+```
+
+Run `bazel test //...` for locale fixtures, every supported language mapping,
+every explicit override with a conflicting language, compatibility fallbacks,
+and rejection of unsupported explicit identifiers. Locale fixtures check data
+contracts; consumer formatter, shaping, bidi, and fallback tests remain separate.

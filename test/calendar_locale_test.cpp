@@ -595,5 +595,22 @@ TEST(CalendarLocaleTest, ArabicEgypt) {
                "{h}:{mm}:{ss}{decimal}{SSS} {a}");
 }
 
+// Verifies custom and built-in selections coexist with independent borrowed
+// data.
+TEST(CalendarLocaleTest, IndependentBorrowedSelections) {
+  const CalendarLocale& polish = PolishPoland();
+  const CalendarLocale& british = EnglishUnitedKingdom();
+  CalendarLocale custom = polish;
+  custom.tag = "custom";
+  custom.first_weekday = Weekday::kSunday;
+  const CalendarLocale* consumers[] = {&polish, &british, &custom};
+  EXPECT_STREQ(consumers[0]->month_date_wide[10], "listopada");
+  EXPECT_STREQ(consumers[1]->month_date_wide[10], "November");
+  EXPECT_EQ(consumers[2]->month_date_wide, polish.month_date_wide);
+  EXPECT_EQ(polish.first_weekday, Weekday::kMonday);
+  EXPECT_STREQ(polish.tag, "pl-PL");
+  EXPECT_STREQ(custom.tag, "custom");
+}
+
 }  // namespace
 }  // namespace roo_locale
