@@ -75,19 +75,19 @@ struct DigitSet {
 /// Shared Gregorian calendar names, patterns, and regional conventions.
 /// Built-ins and their strings have program lifetime and constant
 /// initialization. Custom aggregates borrow every pointer: all referenced
-/// arrays and strings must remain immutable and outlive consumers. Consumers
-/// validate custom data, including UTF-8, table cardinalities, enum values, and
+/// arrays and strings must remain immutable and outlive consumers. Every
+/// pointer is nonnull; all strings are NUL-terminated valid UTF-8. Consumers
+/// validate custom data, including table cardinalities, enum values, and
 /// pattern bounds. This value selects neither a timezone nor a formatter or
 /// shaping engine.
 struct CalendarLocale {
   const char* tag;  ///< Public locale tag, e.g. "pl-PL".
-  const char* const*
-      month_standalone_abbreviated;           ///< 12 entries, January first.
-  const char* const* month_date_abbreviated;  ///< 12 entries, January first.
-  const char* const* month_standalone_wide;   ///< 12 entries, January first.
-  const char* const* month_date_wide;         ///< 12 entries, January first.
-  const char* const* weekday_abbreviated;     ///< 7 entries, Sunday first.
-  const char* const* weekday_narrow;          ///< 7 entries, Sunday first.
+  const char* const* month_standalone_abbreviated;  ///< 12 months, Jan first.
+  const char* const* month_date_abbreviated;        ///< 12 months, Jan first.
+  const char* const* month_standalone_wide;         ///< 12 months, Jan first.
+  const char* const* month_date_wide;               ///< 12 months, Jan first.
+  const char* const* weekday_abbreviated;           ///< 7 days, Sunday first.
+  const char* const* weekday_narrow;                ///< 7 days, Sunday first.
   const char* am;
   const char* pm;
   const char* fraction_separator;

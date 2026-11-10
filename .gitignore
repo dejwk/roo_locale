@@ -1,2 +1,3 @@
 MODULE.bazel.lock
 bazel-*
+.calendar_locale_validation/

@@ -132,3 +132,75 @@ Run `bazel test //...` for locale fixtures, every supported language mapping,
 every explicit override with a conflicting language, compatibility fallbacks,
 and rejection of unsupported explicit identifiers. Locale fixtures check data
 contracts; consumer formatter, shaping, bidi, and fallback tests remain separate.
+
+## Linking and resource acceptance
+
+The optional calendar target compiles each locale into its own object. Latin
+and Arabic-Indic digits have separate objects; equal English name tables share
+one object. Data/function sections and linker garbage collection also remove
+unreferenced regional English arrays. The language-only target contains no
+calendar header or source. Each consumer borrows one pointer (four bytes on
+ESP32); the shared locale descriptor is 52 bytes on ESP32 and 104 on x86-64.
+
+`//:calendar_probe_language_only`, `//:calendar_probe_<underscore locale>`, and
+`//:calendar_probe_all` provide thirteen minimal consumers. The normal
+`//:calendar_locale_test` build also checks their final ELF symbols and payloads
+through `//:calendar_link_acceptance`. It rejects extra locale accessors, tags,
+native names, digit data, regional English arrays, and pattern tables, as well as
+added constructors or mutable data. Host PIE builds use relocatable read-only
+tables in `.data.rel.ro`; the checker allows those relocation sections.
+ASAN data tests run separately from the placement gate because ASAN adds global
+registration constructors and deliberately retains instrumented globals.
+
+The standalone checker compiles the same thirteen probes as a static archive,
+checks every object's constant initialization and lack of allocation/time/UI
+symbols, executes host probes, and records linked sections, maps, and symbols:
+
+```sh
+python3 test/verify_calendar_linking.py \
+  --output-dir .calendar_locale_validation/host
+python3 test/verify_calendar_linking.py \
+  --cxx "$HOME/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32-elf-g++" \
+  --esp32-ld-dir "$HOME/.platformio/packages/framework-arduinoespressif32-libs/esp32/ld" \
+  --output-dir .calendar_locale_validation/esp32
+```
+
+Measured 2026-11-10 with GCC 14.2.0 on x86-64 and Espressif GCC 14.2.0
+(`esp-14.2.0_20251107`) for ESP32, using the installed ESP-IDF 5.5.2 memory and
+section linker scripts. Both use C++11, `-Os`, no exceptions/RTTI/PIC/PIE,
+data/function sections, and section garbage collection. Figures are byte deltas
+against the language-only program, including descriptor pointers, strings,
+patterns, digits, accessor/probe code, and alignment. Shared strings are counted
+as actually linked, so the all-locales figure is smaller than the sum of singles.
+
+| Probe | Host read-only bytes added | ESP32 flash bytes added | ESP32 RAM bytes added |
+| --- | ---: | ---: | ---: |
+| language_only | 0 | 0 | 0 |
+| pl_PL | 1446 | 972 | 0 |
+| en_US | 1222 | 792 | 0 |
+| en_GB | 1222 | 800 | 0 |
+| fr_FR | 1222 | 804 | 0 |
+| es_ES | 1222 | 816 | 0 |
+| it_IT | 1222 | 796 | 0 |
+| de_DE | 1350 | 884 | 0 |
+| ru_RU | 1702 | 1188 | 0 |
+| zh_Hans_CN | 1190 | 760 | 0 |
+| hi_IN | 1446 | 1032 | 0 |
+| ar_EG | 1222 | 840 | 0 |
+| all | 10722 | 6773 | 0 |
+
+All selected locale symbols lie in ESP32 flash address ranges: `.flash.rodata`
+for data and `.flash.text` for accessors. Every non-flash allocated section stays
+the same size as the language-only baseline. The SDK scripts reserve 1,024 bytes
+for vectors and four BSS bytes even in the empty probe; those are baseline costs,
+not locale storage. No locale object has writable data or dynamic initializers.
+No single-locale link retains another locale's patterns, native names, or digits;
+US and UK retain only their own abbreviation array plus equal shared names.
+
+ESP32 probes use `main` as the entry without the startup/runtime libraries. They
+validate actual SDK section placement and the library's flash/RAM delta, and are
+not bootable firmware or native-script rendering acceptance. Application linker
+maps remain authoritative for other SDK configurations and targets. Reports,
+ELFs, symbol dumps, and maps are retained in the ignored output directories.
+Bazel continues to use its stable persistent output root and global disk cache
+under `/home/dawidk`, with the configured resource limits unchanged.

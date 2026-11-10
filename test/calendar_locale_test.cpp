@@ -204,6 +204,10 @@ TEST(CalendarLocaleTest, ValidationBoundaries) {
 TEST(CalendarLocaleTest, PolishPoland) {
   const CalendarLocale& locale = PolishPoland();
   ValidateLocale(locale);
+  for (size_t month = 0; month < 12; ++month) {
+    EXPECT_STRNE(locale.month_standalone_wide[month],
+                 locale.month_date_wide[month]);
+  }
   EXPECT_STREQ(locale.tag, "pl-PL");
   EXPECT_STREQ(locale.month_standalone_wide[10], "listopad");
   EXPECT_STREQ(locale.month_date_wide[10], "listopada");
@@ -421,6 +425,8 @@ TEST(CalendarLocaleTest, ItalianItaly) {
 TEST(CalendarLocaleTest, GermanGermany) {
   const CalendarLocale& locale = GermanGermany();
   ValidateLocale(locale);
+  EXPECT_STREQ(locale.month_standalone_abbreviated[2], "Mär");
+  EXPECT_STREQ(locale.month_date_abbreviated[2], "März");
   EXPECT_STREQ(locale.tag, "de-DE");
   EXPECT_STREQ(locale.month_standalone_wide[0], "Januar");
   EXPECT_STREQ(locale.month_standalone_wide[10], "November");
