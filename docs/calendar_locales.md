@@ -45,6 +45,9 @@ The consumer implements pattern evaluation, bounds checking, and shaping.
 | it-IT | 10 novembre 2026 | 10/11/2026 | Monday | H23 |
 | de-DE | 10. November 2026 | 10.11.2026 | Monday | H23 |
 | ru-RU | 10 ноября 2026 г. | 10.11.2026 | Monday | H23 |
+| zh-Hans-CN | 2026年11月10日 | 2026/11/10 | Monday | H23 |
+| hi-IN | 10 नवंबर 2026 | 10/11/2026 | Sunday | H12 |
+| ar-EG | ١٠ نوفمبر ٢٠٢٦ | ١٠‏/١١‏/٢٠٢٦ | Saturday | H12 |
 
 ## Source and attribution
 
@@ -53,7 +56,7 @@ Data is a reviewed static subset of Unicode CLDR **48**, tag `release-48`, commi
 The data is covered by the [Unicode License V3](../LICENSE-UNICODE), separately
 from this library's MIT code license. Copyright © 2004–2025 Unicode, Inc.
 
-Source files under that commit: `common/main/{root,pl,en,en_US,en_001,en_GB,fr,es,it,de,ru}.xml`,
+Source files under that commit: `common/main/{root,pl,en,en_US,en_001,en_GB,fr,es,it,de,ru,zh,hi,ar,ar_EG}.xml`,
 `common/supplemental/{supplementalData,numberingSystems}.xml`.
 Gregorian calendar aliases and inheritance markers are resolved into complete
 tables; no source inheritance markers are retained. Week starts and preferred
@@ -76,3 +79,16 @@ English regions share wide months and weekday arrays from one source file.
 CLDR's UK September abbreviation is `Sept`, versus US `Sep`, so abbreviated
 arrays remain distinct; day periods also retain UK `am`/`pm` versus US `AM`/`PM`.
 The UK inherits through `en_001` before `en`; both inherit from `root`.
+
+All locales describe Gregorian dates. Chinese uses Simplified Han text and
+Latin digits; Hindi uses Devanagari names and Latin digits. Arabic/Egypt uses
+logical-order Arabic, RTL metadata, Arabic-Indic digits U+0660–U+0669, and U+066B
+as the fractional separator. Arabic numeric dates retain U+200F RIGHT-TO-LEFT MARK;
+Russian year suffixes and many H12 patterns retain U+202F NARROW NO-BREAK SPACE.
+The examples above preserve those bytes. The library does not reverse text.
+
+Native rendering requires suitable glyphs, Devanagari shaping/mark positioning,
+and Arabic contextual shaping and bidi layout. Consumers measure and paint the
+same shaped runs, isolate ASCII offsets as LTR runs, and choose an explicit
+ASCII numeric LTR fallback when native rendering is unavailable. Native-script
+rendering and fallback acceptance belong to consumer tests, not this data library.

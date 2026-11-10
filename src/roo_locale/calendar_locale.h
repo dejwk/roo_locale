@@ -121,4 +121,13 @@ const CalendarLocale& GermanGermany();
 /// Returns the program-lifetime Gregorian locale for ru-RU.
 const CalendarLocale& RussianRussia();
 
+/// Returns the program-lifetime Gregorian locale for zh-Hans-CN.
+const CalendarLocale& ChineseSimplifiedChina();
+
+/// Returns the program-lifetime Gregorian locale for hi-IN.
+const CalendarLocale& HindiIndia();
+
+/// Returns the program-lifetime Gregorian locale for ar-EG.
+const CalendarLocale& ArabicEgypt();
+
 }  // namespace roo_locale
