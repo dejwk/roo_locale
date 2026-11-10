@@ -100,4 +100,10 @@ struct CalendarLocale {
 /// Returns the program-lifetime Gregorian locale for Polish in Poland.
 const CalendarLocale& PolishPoland();
 
+/// Returns the program-lifetime Gregorian locale for en-US.
+const CalendarLocale& EnglishUnitedStates();
+
+/// Returns the program-lifetime Gregorian locale for en-GB.
+const CalendarLocale& EnglishUnitedKingdom();
+
 }  // namespace roo_locale

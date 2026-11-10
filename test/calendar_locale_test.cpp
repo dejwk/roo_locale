@@ -230,5 +230,87 @@ TEST(CalendarLocaleTest, PolishPoland) {
   EXPECT_EQ(&locale, &PolishPoland());
 }
 
+// Verifies en-US native names, Sunday-first indexing, and regional conventions.
+TEST(CalendarLocaleTest, EnglishUnitedStates) {
+  const CalendarLocale& locale = EnglishUnitedStates();
+  ValidateLocale(locale);
+  EXPECT_STREQ(locale.tag, "en-US");
+  EXPECT_STREQ(locale.month_standalone_wide[0], "January");
+  EXPECT_STREQ(locale.month_standalone_wide[10], "November");
+  EXPECT_STREQ(locale.month_date_wide[10], "November");
+  EXPECT_STREQ(locale.month_date_abbreviated[1], "Feb");
+  EXPECT_STREQ(locale.weekday_abbreviated[0], "Sun");
+  EXPECT_STREQ(locale.weekday_abbreviated[6], "Sat");
+  EXPECT_STREQ(locale.weekday_narrow[2], "T");
+  EXPECT_EQ(locale.first_weekday, Weekday::kSunday);
+  EXPECT_EQ(locale.hour_cycle, HourCycle::kH12);
+  EXPECT_EQ(locale.script, Script::kLatin);
+  EXPECT_EQ(locale.direction, TextDirection::kLtr);
+  EXPECT_STREQ(locale.am, "AM");
+  EXPECT_STREQ(locale.pm, "PM");
+  EXPECT_STREQ(locale.fraction_separator, ".");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDate),
+               "{M}/{d}/{yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDayMonth), "{M}/{d}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kDayMonthWide), "{MMMM} {d}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kMonthYearWide),
+               "{LLLL} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kFullDate),
+               "{MMMM} {d}, {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH23Minutes), "{HH}:{mm}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Minutes),
+               "{h}:{mm}\u202f{a}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Millis),
+               "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
+}
+
+// Verifies en-GB native names, Sunday-first indexing, and regional conventions.
+TEST(CalendarLocaleTest, EnglishUnitedKingdom) {
+  const CalendarLocale& locale = EnglishUnitedKingdom();
+  ValidateLocale(locale);
+  EXPECT_STREQ(locale.tag, "en-GB");
+  EXPECT_STREQ(locale.month_standalone_wide[0], "January");
+  EXPECT_STREQ(locale.month_standalone_wide[10], "November");
+  EXPECT_STREQ(locale.month_date_wide[10], "November");
+  EXPECT_STREQ(locale.month_date_abbreviated[1], "Feb");
+  EXPECT_STREQ(locale.weekday_abbreviated[0], "Sun");
+  EXPECT_STREQ(locale.weekday_abbreviated[6], "Sat");
+  EXPECT_STREQ(locale.weekday_narrow[2], "T");
+  EXPECT_EQ(locale.first_weekday, Weekday::kMonday);
+  EXPECT_EQ(locale.hour_cycle, HourCycle::kH23);
+  EXPECT_EQ(locale.script, Script::kLatin);
+  EXPECT_EQ(locale.direction, TextDirection::kLtr);
+  EXPECT_STREQ(locale.am, "am");
+  EXPECT_STREQ(locale.pm, "pm");
+  EXPECT_STREQ(locale.fraction_separator, ".");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDate),
+               "{dd}/{MM}/{yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kNumericDayMonth),
+               "{dd}/{MM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kDayMonthWide), "{d} {MMMM}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kMonthYearWide),
+               "{LLLL} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kFullDate),
+               "{d} {MMMM} {yyyy}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH23Minutes), "{HH}:{mm}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Minutes),
+               "{h}:{mm}\u202f{a}");
+  EXPECT_STREQ(Pattern(locale, CalendarPatternId::kH12Millis),
+               "{h}:{mm}:{ss}{decimal}{SSS}\u202f{a}");
+}
+
+// Verifies sharing preserves the regional differences in the pinned CLDR data.
+TEST(CalendarLocaleTest, EnglishSharedNames) {
+  const CalendarLocale& us = EnglishUnitedStates();
+  const CalendarLocale& gb = EnglishUnitedKingdom();
+  EXPECT_EQ(us.month_standalone_wide, gb.month_standalone_wide);
+  EXPECT_EQ(us.month_date_wide, gb.month_date_wide);
+  EXPECT_EQ(us.weekday_abbreviated, gb.weekday_abbreviated);
+  EXPECT_EQ(us.weekday_narrow, gb.weekday_narrow);
+  EXPECT_STREQ(us.month_date_abbreviated[8], "Sep");
+  EXPECT_STREQ(gb.month_date_abbreviated[8], "Sept");
+  EXPECT_EQ(us.digits, gb.digits);
+}
+
 }  // namespace
 }  // namespace roo_locale

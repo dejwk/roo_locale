@@ -38,6 +38,8 @@ The consumer implements pattern evaluation, bounds checking, and shaping.
 | Locale | Full date (10 November 2026) | Numeric date | Week start | Clock |
 | --- | --- | --- | --- | --- |
 | pl-PL | 10 listopada 2026 | 10.11.2026 | Monday | H23 |
+| en-US | November 10, 2026 | 11/10/2026 | Sunday | H12 |
+| en-GB | 10 November 2026 | 10/11/2026 | Monday | H23 |
 
 ## Source and attribution
 
@@ -46,7 +48,7 @@ Data is a reviewed static subset of Unicode CLDR **48**, tag `release-48`, commi
 The data is covered by the [Unicode License V3](../LICENSE-UNICODE), separately
 from this library's MIT code license. Copyright © 2004–2025 Unicode, Inc.
 
-Source files under that commit: `common/main/{root,pl}.xml`,
+Source files under that commit: `common/main/{root,pl,en_US,en_001,en_GB}.xml`,
 `common/supplemental/{supplementalData,numberingSystems}.xml`.
 Gregorian calendar aliases and inheritance markers are resolved into complete
 tables; no source inheritance markers are retained. Week starts and preferred
@@ -64,3 +66,8 @@ Unicode escapes in C++ sources. There is no runtime CLDR parsing or dependency.
 
 See the [design](design/proposed/calendar_locale_design.md) for consumer formatter
 and rendering responsibilities and the implementation stages.
+
+English regions share wide months and weekday arrays from one source file.
+CLDR's UK September abbreviation is `Sept`, versus US `Sep`, so abbreviated
+arrays remain distinct; day periods also retain UK `am`/`pm` versus US `AM`/`PM`.
+The UK inherits through `en_001` before `en`; both inherit from `root`.
