@@ -37,6 +37,10 @@ def calendar_selection_tests():
         ("override_zh_Hans_CN", ["ROO_LANG=ROO_LANG_en", "ROO_CALENDAR_LOCALE=zh_Hans_CN"], "ChineseSimplifiedChina"),
         ("override_hi_IN", ["ROO_LANG=ROO_LANG_en", "ROO_CALENDAR_LOCALE=hi_IN"], "HindiIndia"),
         ("override_ar_EG", ["ROO_LANG=ROO_LANG_en", "ROO_CALENDAR_LOCALE=ar_EG"], "ArabicEgypt"),
+        ("override_alias", [
+            "ROO_CALENDAR_LOCALE=ROO_TEST_LOCALE_ALIAS",
+            "ROO_TEST_LOCALE_ALIAS=fr_FR",
+        ], "FrenchFrance"),
     ]
     for name, defines, accessor in cases:
         cc_test(
@@ -58,14 +62,15 @@ def calendar_selection_tests():
         outs = ["invalid_calendar_override.ok"],
         toolchains = ["@bazel_tools//tools/cpp:current_cc_toolchain"],
         cmd = """
-            for value in unsupported pl en_AU zh_Hant 0 2 en_US+0; do
-            if $(CC) -x c++ -std=c++11 -fsyntax-only -Isrc \
-                -DROO_CALENDAR_LOCALE=$$value -DROO_TEST_CALENDAR_ACCESSOR=PolishPoland \
-                $(location test/calendar_selection_test.cpp) >$@.log 2>&1; then
-                echo 'Unsupported calendar override unexpectedly compiled' >&2
-                exit 1
-            fi
-            grep -q 'Unsupported ROO_CALENDAR_LOCALE' $@.log || { cat $@.log; exit 1; }
+            for value in unsupported pl en_AU zh_Hant 0 2 en_US+0 \
+                en_US+2+en_US '' '"en_US"' 'en_US,en_GB'; do
+                if $(CC) -x c++ -std=c++11 -fsyntax-only -Isrc \
+                    "-DROO_CALENDAR_LOCALE=$$value" -DROO_TEST_CALENDAR_ACCESSOR=PolishPoland \
+                    $(location test/calendar_selection_test.cpp) >$@.log 2>&1; then
+                    echo "Unsupported calendar override unexpectedly compiled: $$value" >&2
+                    exit 1
+                fi
+                grep -q 'Unsupported ROO_CALENDAR_LOCALE' $@.log || { cat $@.log; exit 1; }
             done
             cp $@.log $@
         """,

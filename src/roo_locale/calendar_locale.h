@@ -132,23 +132,40 @@ const CalendarLocale& HindiIndia();
 /// Returns the program-lifetime Gregorian locale for ar-EG.
 const CalendarLocale& ArabicEgypt();
 
-// Private preprocessor dispatch rejects unsupported explicit identifiers.
 #ifdef ROO_CALENDAR_LOCALE
-#define ROO_LOCALE_INTERNAL_CALENDAR_pl_PL_ID 1
-#define ROO_LOCALE_INTERNAL_CALENDAR_en_US_ID 2
-#define ROO_LOCALE_INTERNAL_CALENDAR_en_GB_ID 3
-#define ROO_LOCALE_INTERNAL_CALENDAR_fr_FR_ID 4
-#define ROO_LOCALE_INTERNAL_CALENDAR_es_ES_ID 5
-#define ROO_LOCALE_INTERNAL_CALENDAR_it_IT_ID 6
-#define ROO_LOCALE_INTERNAL_CALENDAR_de_DE_ID 7
-#define ROO_LOCALE_INTERNAL_CALENDAR_ru_RU_ID 8
-#define ROO_LOCALE_INTERNAL_CALENDAR_zh_Hans_CN_ID 9
-#define ROO_LOCALE_INTERNAL_CALENDAR_hi_IN_ID 10
-#define ROO_LOCALE_INTERNAL_CALENDAR_ar_EG_ID 11
-#define ROO_LOCALE_INTERNAL_CALENDAR_ID_IMPL(value) \
-  ROO_LOCALE_INTERNAL_CALENDAR_##value##_ID
-#define ROO_LOCALE_INTERNAL_CALENDAR_ID(value) \
-  ROO_LOCALE_INTERNAL_CALENDAR_ID_IMPL(value)
+namespace internal {
+
+constexpr bool CalendarLocaleIdsEqual(const char* lhs, const char* rhs) {
+  return *lhs == *rhs &&
+         (*lhs == '\0' || CalendarLocaleIdsEqual(lhs + 1, rhs + 1));
+}
+
+using CalendarLocaleAccessor = const CalendarLocale& (*)();
+
+constexpr CalendarLocaleAccessor FindCalendarLocaleAccessor(const char* id) {
+  return CalendarLocaleIdsEqual(id, "pl_PL")        ? PolishPoland
+         : CalendarLocaleIdsEqual(id, "en_US")      ? EnglishUnitedStates
+         : CalendarLocaleIdsEqual(id, "en_GB")      ? EnglishUnitedKingdom
+         : CalendarLocaleIdsEqual(id, "fr_FR")      ? FrenchFrance
+         : CalendarLocaleIdsEqual(id, "es_ES")      ? SpanishSpain
+         : CalendarLocaleIdsEqual(id, "it_IT")      ? ItalianItaly
+         : CalendarLocaleIdsEqual(id, "de_DE")      ? GermanGermany
+         : CalendarLocaleIdsEqual(id, "ru_RU")      ? RussianRussia
+         : CalendarLocaleIdsEqual(id, "zh_Hans_CN") ? ChineseSimplifiedChina
+         : CalendarLocaleIdsEqual(id, "hi_IN")      ? HindiIndia
+         : CalendarLocaleIdsEqual(id, "ar_EG")      ? ArabicEgypt
+                                                    : nullptr;
+}
+
+constexpr bool IsSupportedCalendarLocale(CalendarLocaleAccessor accessor) {
+  return accessor != nullptr;
+}
+
+}  // namespace internal
+
+#define ROO_LOCALE_INTERNAL_STRINGIFY_IMPL(...) #__VA_ARGS__
+#define ROO_LOCALE_INTERNAL_STRINGIFY(...) \
+  ROO_LOCALE_INTERNAL_STRINGIFY_IMPL(__VA_ARGS__)
 #endif
 
 /// Returns the build-selected program-lifetime Gregorian calendar locale.
@@ -160,31 +177,13 @@ const CalendarLocale& ArabicEgypt();
 /// references override this default without changing any global state.
 inline const CalendarLocale& DefaultCalendarLocale() {
 #ifdef ROO_CALENDAR_LOCALE
-#if ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 1
-  return PolishPoland();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 2
-  return EnglishUnitedStates();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 3
-  return EnglishUnitedKingdom();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 4
-  return FrenchFrance();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 5
-  return SpanishSpain();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 6
-  return ItalianItaly();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 7
-  return GermanGermany();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 8
-  return RussianRussia();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 9
-  return ChineseSimplifiedChina();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 10
-  return HindiIndia();
-#elif ROO_LOCALE_INTERNAL_CALENDAR_ID(ROO_CALENDAR_LOCALE) == 11
-  return ArabicEgypt();
-#else
-#error "Unsupported ROO_CALENDAR_LOCALE; use a supported underscore identifier"
-#endif
+  // Match the entire expanded value, including any unexpected tokens.
+  constexpr auto accessor = internal::FindCalendarLocaleAccessor(
+      ROO_LOCALE_INTERNAL_STRINGIFY(ROO_CALENDAR_LOCALE));
+  static_assert(
+      internal::IsSupportedCalendarLocale(accessor),
+      "Unsupported ROO_CALENDAR_LOCALE; use an underscore identifier");
+  return accessor();
 #elif ROO_LANG == ROO_LANG_pl
   return PolishPoland();
 #elif ROO_LANG == ROO_LANG_en || ROO_LANG == ROO_LANG_en_US
@@ -213,19 +212,8 @@ inline const CalendarLocale& DefaultCalendarLocale() {
 }
 
 #ifdef ROO_CALENDAR_LOCALE
-#undef ROO_LOCALE_INTERNAL_CALENDAR_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_ID_IMPL
-#undef ROO_LOCALE_INTERNAL_CALENDAR_pl_PL_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_en_US_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_en_GB_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_fr_FR_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_es_ES_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_it_IT_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_de_DE_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_ru_RU_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_zh_Hans_CN_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_hi_IN_ID
-#undef ROO_LOCALE_INTERNAL_CALENDAR_ar_EG_ID
+#undef ROO_LOCALE_INTERNAL_STRINGIFY
+#undef ROO_LOCALE_INTERNAL_STRINGIFY_IMPL
 #endif
 
 }  // namespace roo_locale

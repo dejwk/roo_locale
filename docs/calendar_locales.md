@@ -18,6 +18,21 @@ immutable and outlive their consumers. Validate custom UTF-8, cardinalities,
 enums, and patterns at installation. No allocation, mutable selection, timezone,
 formatter, calendar arithmetic, operating-system locale, or UI dependency exists.
 
+## Try the Arduino example
+
+Open **File → Examples → roo_locale → CalendarLocaleDemo** in the Arduino IDE,
+upload the sketch, and open Serial Monitor at 115200 baud. The example prints
+the build default and an explicit Polish locale every three seconds. In the
+Polish block, November appears as `listopad` on its own and `listopada` in a
+date. The full-date line shows the raw pattern. A formatter would substitute
+the date fields to produce a value such as `10 listopada 2026`.
+
+The [sketch](../examples/CalendarLocaleDemo/CalendarLocaleDemo.ino) also prints
+narrow weekday headings in calendar-column order. Index
+`weekday_narrow[(first_day + column) % 7]`, where `first_day` is the numeric
+value of `locale.first_weekday` and `column` runs from 0 to 6. This puts Monday
+in the first Polish column while keeping the underlying arrays Sunday-first.
+
 ## Patterns and text
 
 Month arrays are January-first; weekday arrays are Sunday-first, regardless of
@@ -101,6 +116,23 @@ rendering and fallback acceptance belong to consumer tests, not this data librar
 identifiers fail compilation. Keep build macros consistent across translation
 units. The override wins over `ROO_LANG`; a locale never selects a timezone.
 
+Pass an unquoted underscore identifier as a project-wide compiler definition.
+In PlatformIO, add the flag to `build_flags` for the selected environment in
+`platformio.ini`. This example selects UK English.
+
+```ini
+build_flags = -DROO_CALENDAR_LOCALE=en_GB
+```
+
+In Bazel, use `--copt` to apply the definition across the C++ build.
+
+```sh
+bazel build --copt=-DROO_CALENDAR_LOCALE=en_GB //:app
+```
+
+In an Arduino IDE sketch, call `roo_locale::EnglishUnitedKingdom()` directly
+when selecting a locale in code.
+
 Without an override, exact language IDs map as follows:
 
 | ROO_LANG suffix | Default |
@@ -145,15 +177,17 @@ ESP32); the shared locale descriptor is 52 bytes on ESP32 and 104 on x86-64.
 `//:calendar_probe_language_only`, `//:calendar_probe_<underscore locale>`, and
 `//:calendar_probe_all` provide thirteen minimal consumers. The normal
 `//:calendar_locale_test` build also checks their final ELF symbols and payloads
-through `//:calendar_link_acceptance`. It rejects extra locale accessors, tags,
-native names, digit data, regional English arrays, and pattern tables, as well as
-added constructors or mutable data. Host PIE builds use relocatable read-only
-tables in `.data.rel.ro`; the checker allows those relocation sections.
+through `//:calendar_link_acceptance`. Each Bazel single-locale probe uses
+`ROO_CALENDAR_LOCALE` to select its locale. The checker rejects extra locale
+accessors, tags, native names, digit data, regional English arrays, and pattern
+tables, as well as added constructors or mutable data. Host PIE builds use
+relocatable read-only tables in `.data.rel.ro`, which the checker allows.
 ASAN data tests run separately from the placement gate because ASAN adds global
 registration constructors and deliberately retains instrumented globals.
 
-The standalone checker compiles the same thirteen probes as a static archive,
-checks every object's constant initialization and lack of allocation/time/UI
+The standalone checker compiles the same thirteen probes against a static
+archive and uses named accessors for the single-locale probes.
+It checks every object's constant initialization and lack of allocation/time/UI
 symbols, executes host probes, and records linked sections, maps, and symbols:
 
 ```sh

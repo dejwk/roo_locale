@@ -25,6 +25,15 @@
         "srcDir": "src",
         "srcFilter": "+<*> -<examples> -<benchmarks> -<doc> -<test>"
     },
+    "export": {
+        "include": [
+            "src",
+            "examples",
+            "docs",
+            "LICENSE-UNICODE",
+            "RELEASE_NOTES.md"
+        ]
+    },
     "examples": [
         "examples/**/*.ino"
     ]
