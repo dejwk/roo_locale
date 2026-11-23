@@ -1,3 +1,13 @@
+# roo_locale 1.2.0
+
+- Added `CalendarLocale` with Unicode CLDR 48 Gregorian data for 11 locales: `pl-PL`, `en-US`, `en-GB`, `fr-FR`, `es-ES`, `it-IT`, `de-DE`, `ru-RU`, `zh-Hans-CN`, `hi-IN`, and `ar-EG`. Each includes localized month and weekday names, date and time patterns, digits, week-start and clock preferences, and script and text-direction metadata.
+- Choose a locale per component or use `DefaultCalendarLocale()`. The `ROO_CALENDAR_LOCALE` build override takes precedence over `ROO_LANG` and rejects unsupported IDs at compile time. With no override, unmapped languages fall back to `en-US`.
+- Added the optional Bazel `calendar_locale` target and selective-linking checks. ESP32 link probes measured 760–1,188 bytes of flash per locale and zero additional RAM.
+- Added a calendar locale guide and the Arduino `CalendarLocaleDemo` sketch, and included both in the PlatformIO export.
+- Updated hosted CI to `roo_today` 2.7.0, enabled host tests, and added GoogleTest `1.18.0.bcr.1` as a Bazel development dependency.
+
+---
+
 # roo_locale 1.1.4
 
 - Updated the Bazel `rules_cc` dependency from 0.2.17 to 0.2.25.
